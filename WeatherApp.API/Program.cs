@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddMemoryCache();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
@@ -17,10 +18,11 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 
 builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 builder.Services.AddTransient(typeof(IMemoryCacheService<>), typeof(MemoryCacheService<>));
+var baseurl = builder.Configuration["WeatherForecastConfigs:baseurl"];
 
 builder.Services.AddHttpClient("weatherClient", config =>
 {
-    config.BaseAddress = new Uri("http://api.weatherapi.com/v1/");
+    config.BaseAddress = new Uri(baseurl);
     config.DefaultRequestHeaders.Clear();
 }).AddPolicyHandler(GetRetryPolicy());
 
@@ -41,5 +43,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseCors("corsapp");
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.Run();

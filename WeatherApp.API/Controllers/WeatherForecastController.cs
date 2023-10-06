@@ -8,8 +8,8 @@ namespace WeatherApp.API.Controllers
     public class WeatherForecastController : ControllerBase
     {
         private readonly IWeatherForecastService _weatherForecastService;
-        public WeatherForecastController(IWeatherForecastService weatherForecastService) 
-        { 
+        public WeatherForecastController(IWeatherForecastService weatherForecastService)
+        {
             _weatherForecastService = weatherForecastService;
         }
 
@@ -19,11 +19,11 @@ namespace WeatherApp.API.Controllers
             try
             {
                 var getCurretnWeather = await _weatherForecastService.GetWeatherForecast(loc);
-                return Ok(new { status = getCurretnWeather.Item1, data = getCurretnWeather.Item2 });
+                return Ok(new { status = getCurretnWeather.Item1, message = getCurretnWeather.Item2, data = getCurretnWeather.Item3 });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return BadRequest(new { status = false, data = ex.Message });
+                return BadRequest(new { status = false, message = ex.Message });
             }
         }
     }

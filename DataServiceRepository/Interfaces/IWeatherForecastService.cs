@@ -9,6 +9,6 @@ namespace DataServiceRepository.Interfaces
 {
     public interface IWeatherForecastService
     {
-        Task<(bool, WeatherEntity)> GetWeatherForecast(string input);
+        Task<(bool, string, WeatherEntity)> GetWeatherForecast(string input);
     }
 }
